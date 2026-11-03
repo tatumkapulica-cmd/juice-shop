@@ -115,7 +115,7 @@ module.exports = function placeOrder () {
             eta: 5
           }
           if (req.body.orderDetails?.deliveryMethodId) {
-            const deliveryMethodFromModel = await DeliveryModel.findOne({ where: { id: req.body.orderDetails.deliveryMethodId } })
+            const deliveryMethodFromModel = await DeliveryModel.findOne({ where: { id: Number(req.body.orderDetails.deliveryMethodId) } })
             if (deliveryMethodFromModel != null) {
               deliveryMethod.deluxePrice = deliveryMethodFromModel.deluxePrice
               deliveryMethod.price = deliveryMethodFromModel.price
@@ -138,7 +138,7 @@ module.exports = function placeOrder () {
 
           if (req.body.UserId) {
             if (req.body.orderDetails && req.body.orderDetails.paymentId === 'wallet') {
-              const wallet = await WalletModel.findOne({ where: { UserId: req.body.UserId } })
+              const wallet = await WalletModel.findOne({ where: { UserId: Number(req.body.UserId) } })
               if ((wallet != null) && wallet.balance >= totalPrice) {
                 WalletModel.decrement({ balance: totalPrice }, { where: { UserId: req.body.UserId } }).catch((error: unknown) => {
                   next(error)
